@@ -1,0 +1,25 @@
+{
+    "autoload": {
+        "psr-4": {
+            "App\\": "src",
+            "Tests\\": "tests"
+        }
+    },
+    "require": {
+        "cboden/ratchet": "^0.4.4"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest",
+        "symfony/var-dumper": "^7.2",
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^12.0",
+        "symplify/easy-coding-standard": "^12.5"
+    },
+    "scripts": {
+        "check-phpunit": "vendor/bin/phpunit tests --testdox --colors=always",
+        "check-phpstan": "vendor/bin/phpstan analyse",
+        "check-cs": "vendor/bin/ecs check --ansi",
+        "fix-cs": "vendor/bin/ecs check --fix --ansi",
+        "test-all": ["@check-cs", "@check-phpstan", "@check-phpunit"]
+    }
+}

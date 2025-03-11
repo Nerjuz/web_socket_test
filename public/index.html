@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue App</title>
+    <script src="https://unpkg.com/vue@3"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script>
+        let conn = new WebSocket('ws://localhost:8080');
+        conn.onopen = function(e) {
+            console.log("Connection established!");
+        };
+
+        conn.onmessage = function(e) {
+            console.log(e.data);
+            alert(e.data);
+        };
+    </script>
+</head>
+</head>
+<body>
+<div id="app">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="navbar-nav mr-auto">
+                <a class="nav-item nav-link" href="#" @click="goTo('name')">Name</a>
+                <a class="nav-item nav-link" href="#" @click="goTo('props')">Props</a>
+            </div>
+        </div>
+    </nav>
+    <div v-if="currentRoute === 'name'">
+        <h1 class="text-center mt-5">Name input</h1>
+        <form class="container mt-5" @submit.prevent="handleSubmitName">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name:</label>
+                <input type="text" class="form-control" id="name" v-model="nameFormData.name" placeholder="Enter name">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    <div v-if="currentRoute === 'props'">
+        <h1 class="text-center mt-5">Props input</h1>
+        <form class="container mt-5" @submit.prevent="handleSubmitProps">
+            <div class="mb-3">
+                <label for="props" class="form-label">Props:</label>
+                <input type="text" class="form-control" id="props" v-model="propsFormData.props" placeholder="Enter props">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    Vue.createApp({
+        data() {
+            return {
+                currentRoute: 'name',
+                nameFormData: {
+                    name: ''
+                },
+                propsFormData: {
+                    props: ''
+                }
+            }
+        },
+        methods: {
+            goTo(route) {
+                this.currentRoute = route;
+            },
+            handleSubmitName() {
+                console.log('Name form submitted:', this.nameFormData);
+                conn.send(JSON.stringify(this.nameFormData));
+            },
+            handleSubmitProps() {
+                console.log('Props form submitted:', this.propsFormData);
+                conn.send(JSON.stringify(this.propsFormData));
+            }
+        }
+    }).mount('#app');
+</script>
+</body>
+</html>

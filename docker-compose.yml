@@ -1,0 +1,38 @@
+
+services:
+  web_socket:
+    build: docker/php
+    container_name: web_socket
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/usr/src/myapp
+    networks:
+      - my_network
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:14-alpine
+    container_name: postgres_socket
+    ports:
+      - 5432:5432
+    volumes:
+      - ~/apps/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=changepassword
+      - POSTGRES_USER=changeuser
+      - POSTGRES_DB=web_socket
+    networks:
+      - my_network
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./public:/usr/share/nginx/html
+    ports:
+      - 8000:80
+
+networks:
+  my_network:
+    driver: bridge
