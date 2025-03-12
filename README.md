@@ -20,7 +20,7 @@ http://localhost:8000
 
 Connect to container ssh
 ```shell
-docker compose exec web_socker bash
+docker compose exec web_socket bash
 ```
 Then run
 ```shell

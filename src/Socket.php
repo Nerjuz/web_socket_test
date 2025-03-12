@@ -26,9 +26,7 @@ class Socket implements MessageComponentInterface
 
     public function onMessage(ConnectionInterface $from, $msg): void
     {
-
         $this->dataStorageService->save($msg);
-        dump(json_decode($msg, true));
 
         $numRecv = count($this->clients) - 1;
         /** @var int $resourceId */
